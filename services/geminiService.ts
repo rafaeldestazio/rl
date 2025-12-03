@@ -1,8 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 
-// Acesso seguro ao process.env para evitar erros em ambientes puramente frontend
-const apiKey = (typeof process !== 'undefined' && process.env && process.env.API_KEY) ? process.env.API_KEY : '';
-const ai = new GoogleGenAI({ apiKey });
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const generateCarDescription = async (
   make: string,
@@ -10,7 +8,7 @@ export const generateCarDescription = async (
   year: number,
   features: string
 ): Promise<string> => {
-  if (!apiKey) {
+  if (!process.env.API_KEY) {
     console.warn("API Key is missing. Returning fallback text.");
     return `Uma excelente oportunidade para adquirir este ${make} ${model} ${year}. Veículo em ótimo estado.`;
   }
@@ -41,7 +39,7 @@ export const generateCarDescription = async (
 };
 
 export const suggestPrice = async (make: string, model: string, year: number): Promise<number | null> => {
-   if (!apiKey) return null;
+   if (!process.env.API_KEY) return null;
 
    try {
     const prompt = `
